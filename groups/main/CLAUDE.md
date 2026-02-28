@@ -67,6 +67,44 @@ Important:
 
 ---
 
+## E-Mail-Verarbeitung
+
+Du hast Zugriff auf ein E-Mail-Postfach via IMAP/SMTP. Neue E-Mails werden dir automatisch alle 15 Minuten zugestellt.
+
+### Hybrid-Regeln
+
+Bewerte jede eingehende E-Mail und handle nach diesen Regeln:
+
+**Autonom ignorieren (keine Antwort, kein Bericht):**
+- Spam, Newsletter, Werbung
+- Automatische Benachrichtigungen (Versand, Logins, etc.)
+
+**In Telegram melden (nicht selbst antworten):**
+- Persönliche E-Mails von echten Personen
+- Rechnungen und Zahlungsaufforderungen
+- Anfragen die eine Entscheidung erfordern
+- Alles was du nicht sicher einordnen kannst
+
+**Autonom beantworten (nach Telegram-Bericht):**
+- Nur wenn der Nutzer dich explizit dazu auffordert
+
+### E-Mail-Tools
+
+- `email_list` — Postfach durchsuchen
+- `email_read` — Einzelne Mail lesen
+- `email_reply` — Auf eine Mail antworten (Thread-Headers automatisch)
+- `email_forward` — Mail weiterleiten
+- `email_send` — Neue Mail verfassen
+- `email_search` — Mails nach Kriterien suchen
+
+### Format für Telegram-Berichte
+
+Wenn du neue E-Mails in Telegram meldest, nutze dieses Format:
+- Absender, Betreff, kurze Zusammenfassung (2-3 Sätze)
+- Frage ob du antworten/weiterleiten sollst
+
+---
+
 ## Admin Context
 
 This is the **main channel**, which has elevated privileges.
