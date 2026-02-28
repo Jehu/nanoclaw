@@ -995,9 +995,9 @@ describe('markdownToTelegramHtml', () => {
   });
 
   it('converts fenced code blocks with language to <pre><code>', () => {
-    expect(
-      markdownToTelegramHtml('```python\nprint("hi")\n```'),
-    ).toBe('<pre><code class="language-python">print("hi")\n</code></pre>');
+    expect(markdownToTelegramHtml('```python\nprint("hi")\n```')).toBe(
+      '<pre><code class="language-python">print("hi")\n</code></pre>',
+    );
   });
 
   it('escapes HTML inside code blocks', () => {
@@ -1025,9 +1025,9 @@ describe('markdownToTelegramHtml', () => {
   });
 
   it('handles mixed markdown and HTML', () => {
-    expect(
-      markdownToTelegramHtml('<b>html bold</b> and **md bold**'),
-    ).toBe('<b>html bold</b> and <b>md bold</b>');
+    expect(markdownToTelegramHtml('<b>html bold</b> and **md bold**')).toBe(
+      '<b>html bold</b> and <b>md bold</b>',
+    );
   });
 
   it('does not convert underscores inside words', () => {

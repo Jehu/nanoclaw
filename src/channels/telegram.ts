@@ -23,7 +23,10 @@ export function markdownToTelegramHtml(text: string): string {
   let result = text.replace(
     /```(\w*)\n?([\s\S]*?)```/g,
     (_match, lang, code) => {
-      const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const escaped = code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
       const block = lang
         ? `<pre><code class="language-${lang}">${escaped}</code></pre>`
         : `<pre>${escaped}</pre>`;
@@ -34,7 +37,10 @@ export function markdownToTelegramHtml(text: string): string {
 
   // Inline code: `...`
   result = result.replace(/`([^`\n]+)`/g, (_match, code) => {
-    const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const escaped = code
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
     inlineCodes.push(`<code>${escaped}</code>`);
     return `\x00INLINECODE${inlineCodes.length - 1}\x00`;
   });
@@ -48,10 +54,16 @@ export function markdownToTelegramHtml(text: string): string {
     return `\x00TAG${tagPlaceholders.length - 1}\x00`;
   });
 
-  result = result.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  result = result
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 
   // Restore preserved HTML tags
-  result = result.replace(/\x00TAG(\d+)\x00/g, (_m, i) => tagPlaceholders[Number(i)]);
+  result = result.replace(
+    /\x00TAG(\d+)\x00/g,
+    (_m, i) => tagPlaceholders[Number(i)],
+  );
 
   // Markdown headings → bold
   result = result.replace(/^#{1,6}\s+(.+)$/gm, '<b>$1</b>');
@@ -166,8 +178,15 @@ export class TelegramChannel implements Channel {
       }
 
       // Store chat metadata for discovery
-      const isGroup = ctx.chat.type === 'group' || ctx.chat.type === 'supergroup';
-      this.opts.onChatMetadata(chatJid, timestamp, chatName, 'telegram', isGroup);
+      const isGroup =
+        ctx.chat.type === 'group' || ctx.chat.type === 'supergroup';
+      this.opts.onChatMetadata(
+        chatJid,
+        timestamp,
+        chatName,
+        'telegram',
+        isGroup,
+      );
 
       // Only deliver full message for registered groups
       const group = this.opts.registeredGroups()[chatJid];
@@ -210,8 +229,15 @@ export class TelegramChannel implements Channel {
         'Unknown';
       const caption = ctx.message.caption ? ` ${ctx.message.caption}` : '';
 
-      const isGroup = ctx.chat.type === 'group' || ctx.chat.type === 'supergroup';
-      this.opts.onChatMetadata(chatJid, timestamp, undefined, 'telegram', isGroup);
+      const isGroup =
+        ctx.chat.type === 'group' || ctx.chat.type === 'supergroup';
+      this.opts.onChatMetadata(
+        chatJid,
+        timestamp,
+        undefined,
+        'telegram',
+        isGroup,
+      );
       this.opts.onMessage(chatJid, {
         id: ctx.message.message_id.toString(),
         chat_jid: chatJid,
@@ -225,9 +251,7 @@ export class TelegramChannel implements Channel {
 
     this.bot.on('message:photo', (ctx) => storeNonText(ctx, '[Photo]'));
     this.bot.on('message:video', (ctx) => storeNonText(ctx, '[Video]'));
-    this.bot.on('message:voice', (ctx) =>
-      storeNonText(ctx, '[Voice message]'),
-    );
+    this.bot.on('message:voice', (ctx) => storeNonText(ctx, '[Voice message]'));
     this.bot.on('message:audio', (ctx) => storeNonText(ctx, '[Audio]'));
     this.bot.on('message:document', (ctx) => {
       const name = ctx.message.document?.file_name || 'file';
